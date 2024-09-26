@@ -1,0 +1,30 @@
+import csv
+import json
+import os
+
+def convert_csv_to_json(csv_file):
+    messages = []
+    with open(csv_file, 'r', newline='', encoding='ISO-8859-1') as file:
+        reader = csv.DictReader(file)
+        
+        # Print headers to check if 'role' and 'content' exist
+        print("CSV Headers:", reader.fieldnames)
+
+        for row in reader:
+            # Safely access 'role' and 'content' to avoid KeyError
+            role = row.get('role')
+            content = row.get('content')
+            if role and content:
+                messages.append({"role": role, "content": content})
+    return {"messages": messages}
+
+def main():
+    csv_directory = r'C:\\Users\\KetakiDesale\\Downloads\\Hotel Prompts'
+    for filename in os.listdir(csv_directory):
+        if filename.endswith(".csv"):
+            csv_file = os.path.join(csv_directory, filename)
+            json_data = convert_csv_to_json(csv_file)
+            print(json.dumps(json_data, indent=4), end='\n\n')
+
+if __name__ == "__main__":
+    main()
